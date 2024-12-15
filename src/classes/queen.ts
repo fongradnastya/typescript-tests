@@ -1,9 +1,9 @@
-import { ChessField } from "./chessField";
-import { ChessMove } from "./chessMove";
-import { Chessman } from "./chessman";
-import { GameBoard } from "./gameBoard";
+import { ChessField } from './chessField';
+import { ChessMove } from './chessMove';
+import { Chessman } from './chessman';
+import { GameBoard } from './gameBoard';
 
-import { FIELD_SIZE } from "../consts";
+import { FIELD_SIZE } from '../consts';
 
 export class Queen extends Chessman {
   /**

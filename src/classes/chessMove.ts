@@ -27,4 +27,8 @@ export class ChessMove {
   public getTargetPosition(): ChessField {
     return this.to;
   }
+
+  public getCapturedChessman(): Chessman | null {
+    return this.capturedPiece ?? null;
+  }
 }
