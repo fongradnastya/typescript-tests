@@ -3,9 +3,9 @@ import { Chessman } from './chessman';
 // Class representing a chessboard field
 export class ChessField {
   public constructor(
-    private row: number, 
-    private column: number, 
-    private occupant: Chessman | null = null
+    private readonly row: number, 
+    private readonly column: number, 
+    private readonly occupant: Chessman | null = null
   ) {}
 
   public getRow(): number {
@@ -16,12 +16,12 @@ export class ChessField {
     return this.column;
   }
 
-  public isBusy(): Chessman | null {
+  public getOccupant(): Chessman | null {
     return this.occupant;
   }
 
-  public setOccupant(piece: Chessman | null): void {
-    this.occupant = piece;
+  public isBusy(): boolean {
+    return this.occupant != null;
   }
 
   public asString(): string {

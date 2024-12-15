@@ -1,5 +1,6 @@
 import { ChessField } from '../classes/chessField';
 import { ChessMove } from '../classes/chessMove';
+import { GameBoard } from '../classes/gameBoard';
 
 /* Chessman ability. */
 export type ChessmanAbility = {
@@ -10,6 +11,7 @@ export type ChessmanAbility = {
   /* Go to a chess field position. */
   readonly goToPosition: (
     target: ChessField,
-    moveNumber: number,
+    lastMove: ChessMove,
+    gameBoard: GameBoard,
   ) => ChessMove | null;
 };
