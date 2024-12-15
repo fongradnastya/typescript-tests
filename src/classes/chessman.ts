@@ -24,5 +24,8 @@ export abstract class Chessman implements ChessmanAbility {
     return this.side;
   }
 
-  public abstract goToPosition(target: ChessField): ChessMove | null;
+  public abstract goToPosition(
+    target: ChessField,
+    moveNumber: number,
+  ): ChessMove | null;
 }

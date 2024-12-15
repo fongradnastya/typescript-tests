@@ -8,5 +8,8 @@ export type ChessmanAbility = {
   readonly getPosition: () => ChessField;
 
   /* Go to a chess field position. */
-  readonly goToPosition: (target: ChessField) => ChessMove | null;
+  readonly goToPosition: (
+    target: ChessField,
+    moveNumber: number,
+  ) => ChessMove | null;
 };
