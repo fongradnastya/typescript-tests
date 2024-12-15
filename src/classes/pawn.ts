@@ -16,14 +16,13 @@ export class Pawn extends Chessman {
   ): ChessMove | null {
     if (!this.isValidTarget(target)) return null;
 
-    const isPromotion = this.isPromotion(target);
+    
     const isEnPassant = this.canCaptureEnPassant(target, lastMove, gameBoard);
-    const capturedChessman = isEnPassant
-      ? lastMove?.getChessman()
-      : gameBoard.getChessmanAt(target) ?? undefined;
+    const capturedChessman = this.captureChessman(target, lastMove, gameBoard, isEnPassant) ?? undefined;
 
     if (this.isForwardMove(target, gameBoard)) {
       // Handle promotion
+      const isPromotion = this.isPromotion(target);
       if (isPromotion) {
         const queen = new Queen(this.getId(), ChessmanType.Queen, target, this.getSide());
         return new ChessMove(this.getPosition(), target, queen, capturedChessman);
@@ -46,6 +45,20 @@ export class Pawn extends Chessman {
   }
 
   // --- Helper Methods ---
+
+  private captureChessman(
+    target: ChessField,
+    lastMove: ChessMove | null,
+    gameBoard: GameBoard,
+    isEnPassant: boolean,
+  ): Chessman | null {
+    if (isEnPassant) {
+      const capturedChessman = lastMove?.getChessman();
+      return capturedChessman?.getSide === this.getSide ? capturedChessman : null;
+    }
+    const capturedChessman = gameBoard.getChessmanAt(target);
+    return capturedChessman?.getSide === this.getSide ? capturedChessman : null;
+  }
 
   private isValidTarget(target: ChessField): boolean {
     const targetRow = target.getRow();
@@ -108,6 +121,12 @@ export class Pawn extends Chessman {
     const targetRow = target.getRow();
     const targetCol = target.getColumn();
 
+    const isDiagonal = Math.abs(targetCol - currentCol) === 1;
+    const isSingleStep = Math.abs(targetRow - currentRow) === 1;
+    if (!isDiagonal || !isSingleStep) {
+      return false;
+    }
+
     const lastChessman = lastMove.getChessman();
     if (!(lastChessman instanceof Pawn)) return false;
 
@@ -117,6 +136,7 @@ export class Pawn extends Chessman {
 
     const isTwoSquareAdvance = Math.abs(lastStartRow - lastEndRow) === 2;
     const isAdjacentColumn = Math.abs(currentCol - lastCol) === 1;
+
     // For white pawns
     if (this.getSide() === ChessSide.White) {
       return (

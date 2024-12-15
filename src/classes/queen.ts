@@ -13,7 +13,7 @@ export class Queen extends Chessman {
    */
   public goToPosition(
     target: ChessField,
-    _lastMove: ChessMove,
+    _lastMove: ChessMove | null,
     gameBoard: GameBoard
   ): ChessMove | null {
     const currentRow = this.getPosition().getRow();

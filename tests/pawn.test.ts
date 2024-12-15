@@ -75,7 +75,7 @@ describe('Pawn', () => {
     const lastMove = new ChessMove(
       new ChessField(7, 4),
       new ChessField(5, 4),
-      new Pawn(7, ChessmanType.Pawn, new ChessField(5, 4), ChessSide.Black)
+      new Pawn(7, ChessmanType.Pawn, new ChessField(5, 3), ChessSide.Black)
     );
 
     const target = new ChessField(6, 4);
