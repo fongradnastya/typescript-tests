@@ -1,6 +1,7 @@
 import { ChessField } from '../src/classes/chessField';
 import { GameBoard } from '../src/classes/gameBoard';
 import { Queen } from '../src/classes/queen';
+import { Pawn } from '../src/classes/pawn';
 import { ChessSide } from '../src/types/chessSide';
 import { ChessmanType } from '../src/types/chessmanType';
 
@@ -49,7 +50,7 @@ describe('Queen', () => {
 
   test('should return null for invalid move', () => {
     const queen = new Queen(1, ChessmanType.Queen, new ChessField(4, 4), ChessSide.White);
-    const target = new ChessField(5, 6); // Invalid move for a queen
+    const target = new ChessField(5, 6);
 
     jest.spyOn(gameBoard, 'isFieldOccupied').mockReturnValue(false);
 
@@ -70,19 +71,23 @@ describe('Queen', () => {
   test('should capture opponent piece', () => {
     const queen = new Queen(1, ChessmanType.Queen, new ChessField(4, 4), ChessSide.White);
     const target = new ChessField(4, 7);
+    const pawn = new Pawn(2, ChessmanType.Pawn, target, ChessSide.Black);
+    gameBoard.placeChessman(pawn);
+    gameBoard.placeChessman(queen);
 
-    jest.spyOn(gameBoard, 'isFieldOccupied').mockReturnValue(true);
     const move = queen.goToPosition(target, null, gameBoard);
     expect(move).not.toBeNull();
     expect(move?.getTargetPosition()).toEqual(target);
-    expect(move?.getCapturedChessman()).toBeNull();
+    expect(move?.getCapturedChessman()).toBe(pawn);
   });
 
   test('should not capture piece of the same side', () => {
     const queen = new Queen(1, ChessmanType.Queen, new ChessField(4, 4), ChessSide.White);
     const target = new ChessField(4, 7);
+    const pawn = new Pawn(2, ChessmanType.Pawn, target, ChessSide.White);
+    gameBoard.placeChessman(pawn);
+    gameBoard.placeChessman(queen);
 
-    jest.spyOn(gameBoard, 'isFieldOccupied').mockReturnValue(true);
     const move = queen.goToPosition(target, null, gameBoard);
     expect(move).toBeNull();
   });

@@ -10,7 +10,7 @@ describe('Pawn', () => {
   let gameBoard: GameBoard;
 
   beforeEach(() => {
-    gameBoard = new GameBoard(); // Mock GameBoard initialization
+    gameBoard = new GameBoard();
   });
 
   test('should move forward one step if not blocked', () => {
@@ -70,36 +70,41 @@ describe('Pawn', () => {
   });
 
   test('should execute en passant correctly', () => {
-    const pawn = new Pawn(6, ChessmanType.Pawn, new ChessField(5, 4), ChessSide.White);
+    const firstPawn = new Pawn(6, ChessmanType.Pawn, new ChessField(5, 4), ChessSide.White);
+    const secondPawn = new Pawn(7, ChessmanType.Pawn, new ChessField(5, 5), ChessSide.Black)
+    gameBoard.placeChessman(firstPawn);
+    gameBoard.placeChessman(secondPawn);
 
     const lastMove = new ChessMove(
       new ChessField(7, 4),
       new ChessField(5, 4),
-      new Pawn(7, ChessmanType.Pawn, new ChessField(5, 3), ChessSide.Black)
+      firstPawn,
     );
 
-    const target = new ChessField(6, 4);
+    const target = new ChessField(4, 4);
     jest.spyOn(gameBoard, 'isFieldOccupied').mockReturnValue(false);
 
-    const move = pawn.goToPosition(target, lastMove, gameBoard);
+    const move = secondPawn.goToPosition(target, lastMove, gameBoard);
     expect(move).not.toBeNull();
     expect(move?.getTargetPosition()).toEqual(target);
-    expect(move?.getCapturedChessman()?.getId()).toEqual('pawn2');
+    expect(move?.getCapturedChessman()).toBe(firstPawn);
   });
 
   test('should not execute en passant if conditions are not met', () => {
-    const pawn = new Pawn(8, ChessmanType.Pawn, new ChessField(5, 4), ChessSide.White);
+    const firstPawn = new Pawn(9, ChessmanType.Pawn, new ChessField(6, 4), ChessSide.Black)
+    const secondPawn = new Pawn(8, ChessmanType.Pawn, new ChessField(6, 5), ChessSide.White);
+    gameBoard.placeChessman(firstPawn);
+    gameBoard.placeChessman(secondPawn);
 
     const lastMove = new ChessMove(
       new ChessField(7, 4),
       new ChessField(6, 4),
-      new Pawn(9, ChessmanType.Pawn, new ChessField(6, 4), ChessSide.Black)
+      firstPawn,
     );
 
-    const target = new ChessField(6, 4);
-    jest.spyOn(gameBoard, 'isFieldOccupied').mockReturnValue(false);
+    const target = new ChessField(7, 4);
 
-    const move = pawn.goToPosition(target, lastMove, gameBoard);
+    const move = secondPawn.goToPosition(target, lastMove, gameBoard);
     expect(move).toBeNull();
   });
 
